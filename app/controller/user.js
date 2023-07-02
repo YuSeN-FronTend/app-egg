@@ -33,7 +33,8 @@ class UserController extends Controller {
     ctx.body = {
       code: 200,
       msg: '登陆成功!',
-      token
+      token,
+      job: userInfo.job
     }
   }
   // 注册

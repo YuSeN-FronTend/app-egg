@@ -12,15 +12,26 @@ module.exports = appInfo => {
    **/
   const config = exports = {};
 
-  // 关闭csrf验证
-  config.security = {
-    csrf: {
-      enable: false
-    }
-  }
 //配置jwt
   config.jwt = {
     secret: '12345678' //加密密钥
+  }
+  // 配置跨域
+  config.cors = {
+    // 允许请求的来源，为*表示允许所有IP请求
+    origin: '*',
+    // 允许请求的方式
+    allowMethods: "GET, HEAD, PUT, POST, DELETE, PATCH",
+    credentials: true
+  }
+
+  config.security = {
+    // 配置对象安全性上定义白名单域属性
+    domainWhiteList: ['*'],
+  // 关闭csrf验证
+    csrf: {
+      enable: false
+    }
   }
 
   // use for cookie sign key, should change to your own and keep security
