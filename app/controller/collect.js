@@ -6,7 +6,7 @@ class CollectController extends Controller {
     // 添加收藏
     async addCollect() {
         const { ctx } = this;
-        const collectBoolean = await ctx.service.collect.judgeCollectInfo(ctx.request.body.abc);
+        const collectBoolean = await ctx.service.collect.judgeCollectInfo(ctx.request.body.route);
         if (collectBoolean && collectBoolean.id) {
             ctx.body = {
                 code: 500,
@@ -14,21 +14,22 @@ class CollectController extends Controller {
                 data: null
             }
             return
-        }
-        const collectInfo = await ctx.service.collect.addCollect(ctx.request.body);
-        if (collectInfo && collectInfo.insertId) {
-            ctx.body = {
-                code: 200,
-                msg: '收藏成功!',
-                data: null
+        } else {
+            const collectInfo = await ctx.service.collect.addCollect(ctx.request.body);
+            if (collectInfo && collectInfo.insertId) {
+                ctx.body = {
+                    code: 200,
+                    msg: '收藏成功!',
+                    data: null
+                }
+                return
             }
-            return
         }
     }
     // 取消收藏
     async quitCollect() {
         const { ctx } = this;
-        const collectBoolean = await ctx.service.collect.judgeCollectInfo(ctx.request.body.abc);
+        const collectBoolean = await ctx.service.collect.judgeCollectInfo(ctx.query.homeId);
         if (!collectBoolean || !collectBoolean.id) {
             ctx.body = {
                 code: 500,
@@ -36,15 +37,16 @@ class CollectController extends Controller {
                 data: null
             }
             return
-        }
-        const collectInfo = await ctx.service.collect.quitCollect(ctx.request.body.abc);
-        if (collectInfo) {
-            ctx.body = {
-                code: 200,
-                msg: '取消收藏成功!',
-                data: null
+        } else {
+            const collectInfo = await ctx.service.collect.quitCollect(ctx.query.homeId);
+            if (collectInfo) {
+                ctx.body = {
+                    code: 200,
+                    msg: '取消收藏成功!',
+                    data: null
+                }
+                return
             }
-            return
         }
     }
     // 获取或查找收藏列表信息
@@ -79,6 +81,30 @@ class CollectController extends Controller {
                 }
                 return;
             }
+        }
+    }
+    // 判断当前页面是否为收藏状态
+    async getCollectStatus() {
+        const { ctx } = this;
+        const collectInfo = await ctx.service.collect.getCollectStatus(ctx.query);
+        if (collectInfo.length) {
+            ctx.body = {
+                code: 200,
+                msg: '该商品已被收藏!',
+                data:{
+                    status: true,
+                }
+            }
+            return;
+        } else {
+            ctx.body = {
+                code: 500,
+                msg: '该商品没被收藏!',
+                data: {
+                    status: false
+                }
+            }
+            return;
         }
     }
 }
