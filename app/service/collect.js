@@ -29,7 +29,6 @@ class CollectService extends Service {
     }
     // 获取收藏列表
     async getCollectInfo(data) {
-        console.log(data);
         const { app } = this;
         if (!data) {
             const collectInfo = await app.mysql.query('select * from collectForm');

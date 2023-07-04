@@ -34,7 +34,8 @@ class UserController extends Controller {
       code: 200,
       msg: '登陆成功!',
       token,
-      job: userInfo.job
+      job: userInfo.job,
+      img: userInfo.image
     }
   }
   // 注册
@@ -58,19 +59,20 @@ class UserController extends Controller {
         data: null
       }
       return
-    }
-    let result = await ctx.service.user.register(ctx.request.body)
-    if(result) {
-      ctx.body = {
-        code: 200,
-        msg: '注册成功!',
-        data: null
-      }
     } else {
-      ctx.body = {
-        code: 500,
-        msg: '注册失败!',
-        data: null
+      let result = await ctx.service.user.register(ctx.request.body)
+      if (result) {
+        ctx.body = {
+          code: 200,
+          msg: '注册成功!',
+          data: null
+        }
+      } else {
+        ctx.body = {
+          code: 500,
+          msg: '注册失败!',
+          data: null
+        }
       }
     }
   }
